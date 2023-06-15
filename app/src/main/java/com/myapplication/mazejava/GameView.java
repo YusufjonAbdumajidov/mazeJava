@@ -9,9 +9,11 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
+import java.util.Stack;
+
 public class GameView extends View {
     private Cell[][] cells;
-    private static final int COLS = 7, ROWS = 10;
+    private static final int COLS = 14, ROWS = 5;
     private static final float WALL_THICKNESS = 4;
     private float cellSize, hMargin, vMargin;
     private Paint wallPaint;
@@ -26,6 +28,9 @@ public class GameView extends View {
     }
 
     private void createMaze(){
+        Stack<Cell> stack = new Stack<>();
+        Cell current, next;
+
         cells = new Cell[COLS][ROWS];
 
         for(int x=0; x<COLS; x++){
@@ -33,6 +38,18 @@ public class GameView extends View {
                 cells[x][y] = new Cell(x,y);
             }
         }
+
+        current = cells[0][0];
+        current.visited = true;
+        do {
+            next = getNeighbour(current);
+            if (next != null) {
+                removeWall(current, next);
+                stack.push(current);
+                current = next;
+                current.visited = true;
+            } else current = stack.pop();
+        }while(!stack.empty());
     }
 
     @Override
@@ -46,7 +63,7 @@ public class GameView extends View {
             cellSize = width/(COLS+1);
         }else cellSize = height/(ROWS+1);
 
-        hMargin = width - COLS*cellSize/2;
+        hMargin = (width - COLS*cellSize)/2;
         vMargin = (height -ROWS*cellSize) /2;
 
         canvas.translate(hMargin, vMargin);
