@@ -64,6 +64,28 @@ public class GameView extends View {
         return null;
     }
 
+    private void removeWall(Cell current, Cell next){
+        if(current.col == next.col && current.row == next.row+1){
+            current.topWall = false;
+            next.bottomWall = false;
+        }
+
+        if(current.col == next.col && current.row == next.row-1){
+            current.bottomWall = false;
+            next.topWall = false;
+        }
+
+        if(current.col == next.col+1 && current.row == next.row){
+            current.leftWall = false;
+            next.rightWall = false;
+        }
+
+        if(current.col == next.col-1 && current.row == next.row){
+            current.rightWall = false;
+            next.leftWall = false;
+        }
+    }
+
     private void createMaze(){
         Stack<Cell> stack = new Stack<>();
         Cell current, next;
