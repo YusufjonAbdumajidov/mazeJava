@@ -33,10 +33,10 @@ public class GameView extends View {
         wallPaint.setStrokeWidth(WALL_THICKNESS);
 
         playerPaint = new Paint();
-        playerPaint.setColor(Color.RED);
+        playerPaint.setColor(Color.BLUE);
 
         exitPaint = new Paint();
-        exitPaint.setColor(Color.BLUE);
+        exitPaint.setColor(Color.GREEN);
 
         random = new Random();
 
@@ -127,7 +127,7 @@ public class GameView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawColor(Color.GREEN);
+        canvas.drawColor(Color.BLACK);
 
         int width = getWidth();
         int height = getHeight();
@@ -195,7 +195,39 @@ public class GameView extends View {
         );
     }
 
+    private void movePlayer(Direction direction){
+        switch(direction){
+            case UP:
+                if(!player.topWall)
+                    player = cells[player.col][player.row-1];
+                break;
+            case DOWN:
+                if(!player.bottomWall)
+                    player = cells[player.col][player.row+1];
+                break;
+            case LEFT:
+                if(!player.leftWall)
+                    player = cells[player.col-1][player.row];
+                break;
+            case RIGHT:
+                if(!player.rightWall)
+                    player = cells[player.col+1][player.row];
+                break;
+        }
+        checkExit();
+
+        invalidate();
+    }
+
+    private void checkExit(){
+        if(player == exit){
+            createMaze();
+        }
+    }
+
     public boolean onTouchEvent(MotionEvent event){
+        if(event.getAction() == MotionEvent.ACTION_DOWN)
+            return true;
         if(event.getAction() == MotionEvent.ACTION_MOVE){
             float x = event.getX();
             float y = event.getY();
@@ -212,19 +244,16 @@ public class GameView extends View {
             if(absDx > cellSize || absDy > cellSize){
                 if(absDx > absDy){
                     if(dx > 0)
-
-                    ;
-                    else
+                       movePlayer(Direction.RIGHT);
+                    else movePlayer(Direction.LEFT);
                 }
                 else{
                     if(dy > 0)
-
-                    ;
-                    else
-
-                        ;
+                        movePlayer(Direction.DOWN);
+                    else movePlayer(Direction.UP);
                 }
             }
+            return true;
         }
 
         return super.onTouchEvent(event);
