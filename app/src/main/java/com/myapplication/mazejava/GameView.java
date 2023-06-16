@@ -15,10 +15,11 @@ import java.util.Stack;
 
 public class GameView extends View {
     private Cell[][] cells;
+    private Cell player, exit;
     private static final int COLS = 8, ROWS = 12;
     private static final float WALL_THICKNESS = 8;
     private float cellSize, hMargin, vMargin;
-    private Paint wallPaint;
+    private Paint wallPaint, playerPaint, exitPaint;
     private Random random;
     public GameView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -26,6 +27,12 @@ public class GameView extends View {
         wallPaint = new Paint();
         wallPaint.setColor(Color.BLACK);
         wallPaint.setStrokeWidth(WALL_THICKNESS);
+
+        playerPaint = new Paint();
+        playerPaint.setColor(Color.RED);
+
+        exitPaint = new Paint();
+        exitPaint.setColor(Color.BLUE);
 
         random = new Random();
 
@@ -98,6 +105,9 @@ public class GameView extends View {
             }
         }
 
+        player = cells[0][0];
+        exit = cells[COLS-1][ROWS-1];
+
         current = cells[0][0];
         current.visited = true;
         do {
@@ -162,6 +172,21 @@ public class GameView extends View {
                             wallPaint);
             }
         }
+
+        canvas.drawRect(
+           player.col * cellSize,
+           player.row*cellSize,
+                (player.col+1)*cellSize,
+                (player.row+1)*cellSize,
+                playerPaint
+        );
+        canvas.drawRect(
+                exit.col * cellSize,
+                exit.row*cellSize,
+                (exit.col+1)*cellSize,
+                (exit.row+1)*cellSize,
+                exitPaint
+        );
     }
 
     private class Cell{
