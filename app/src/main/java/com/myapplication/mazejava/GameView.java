@@ -56,6 +56,12 @@ public class GameView extends View {
         if(cell.row < ROWS-1)
             if(!cells[cell.col][cell.row+1].visited)
                 neighbours.add(cells[cell.col][cell.row+1]);
+
+        if(neighbours.size() > 0){
+        int index = random.nextInt(neighbours.size());
+        return neighbours.get(index);
+        }
+        return null;
     }
 
     private void createMaze(){
