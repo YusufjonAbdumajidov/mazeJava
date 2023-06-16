@@ -9,6 +9,8 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+import java.util.Random;
 import java.util.Stack;
 
 public class GameView extends View {
@@ -17,6 +19,7 @@ public class GameView extends View {
     private static final float WALL_THICKNESS = 4;
     private float cellSize, hMargin, vMargin;
     private Paint wallPaint;
+    private Random random;
     public GameView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
 
@@ -24,7 +27,35 @@ public class GameView extends View {
         wallPaint.setColor(Color.BLACK);
         wallPaint.setStrokeWidth(WALL_THICKNESS);
 
+        random = new Random();
+
         createMaze();
+    }
+
+    private Cell getNeighbour(Cell cell){
+        ArrayList<Cell> neighbours = new ArrayList<>();
+
+        //left
+        if(cell.col > 0)
+            if(!cells[cell.col-1][cell.row].visited)
+                neighbours.add(cells[cell.col-1][cell.row]);
+
+        //right
+        if(cell.col < COLS-1)
+            if(!cells[cell.col+1][cell.row].visited)
+                neighbours.add(cells[cell.col+1][cell.row]);
+
+
+        //top
+        if(cell.row > 0)
+            if(!cells[cell.col][cell.row-1].visited)
+                neighbours.add(cells[cell.col][cell.row-1]);
+
+
+        //bottom
+        if(cell.row < ROWS-1)
+            if(!cells[cell.col][cell.row+1].visited)
+                neighbours.add(cells[cell.col][cell.row+1]);
     }
 
     private void createMaze(){
@@ -110,7 +141,8 @@ public class GameView extends View {
                 topWall = true,
                 leftWall = true,
                 bottomWall = true,
-                rightWall = true;
+                rightWall = true,
+                visited = false;
 
         int col, row;
         public Cell(int col, int row){
