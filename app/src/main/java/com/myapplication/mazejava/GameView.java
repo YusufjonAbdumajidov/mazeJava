@@ -15,8 +15,8 @@ import java.util.Stack;
 
 public class GameView extends View {
     private Cell[][] cells;
-    private static final int COLS = 14, ROWS = 5;
-    private static final float WALL_THICKNESS = 4;
+    private static final int COLS = 8, ROWS = 12;
+    private static final float WALL_THICKNESS = 8;
     private float cellSize, hMargin, vMargin;
     private Paint wallPaint;
     private Random random;
