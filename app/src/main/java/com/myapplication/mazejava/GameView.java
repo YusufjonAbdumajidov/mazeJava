@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -14,6 +15,9 @@ import java.util.Random;
 import java.util.Stack;
 
 public class GameView extends View {
+    private enum Direction{
+        UP,DOWN,LEFT,RIGHT;
+    }
     private Cell[][] cells;
     private Cell player, exit;
     private static final int COLS = 8, ROWS = 12;
@@ -25,7 +29,7 @@ public class GameView extends View {
         super(context, attrs);
 
         wallPaint = new Paint();
-        wallPaint.setColor(Color.BLACK);
+        wallPaint.setColor(Color.WHITE);
         wallPaint.setStrokeWidth(WALL_THICKNESS);
 
         playerPaint = new Paint();
@@ -173,20 +177,57 @@ public class GameView extends View {
             }
         }
 
+        float margin = cellSize/10;
+
         canvas.drawRect(
-           player.col * cellSize,
-           player.row*cellSize,
-                (player.col+1)*cellSize,
-                (player.row+1)*cellSize,
+           player.col * cellSize+margin,
+           player.row*cellSize+margin,
+                (player.col+1)*cellSize-margin,
+                (player.row+1)*cellSize-margin,
                 playerPaint
         );
         canvas.drawRect(
-                exit.col * cellSize,
-                exit.row*cellSize,
-                (exit.col+1)*cellSize,
-                (exit.row+1)*cellSize,
+                exit.col * cellSize+margin,
+                exit.row*cellSize+margin,
+                (exit.col+1)*cellSize-margin,
+                (exit.row+1)*cellSize-margin,
                 exitPaint
         );
+    }
+
+    public boolean onTouchEvent(MotionEvent event){
+        if(event.getAction() == MotionEvent.ACTION_MOVE){
+            float x = event.getX();
+            float y = event.getY();
+
+            float playerCenterX = hMargin + (player.col+0.5f)*cellSize;
+            float playerCenterY = vMargin + (player.row+0.5f)*cellSize;
+
+            float dx = x - playerCenterX;
+            float dy = y - playerCenterY;
+
+            float absDx = Math.abs(dx);
+            float absDy = Math.abs(dy);
+
+            if(absDx > cellSize || absDy > cellSize){
+                if(absDx > absDy){
+                    if(dx > 0)
+
+                    ;
+                    else
+                }
+                else{
+                    if(dy > 0)
+
+                    ;
+                    else
+
+                        ;
+                }
+            }
+        }
+
+        return super.onTouchEvent(event);
     }
 
     private class Cell{
